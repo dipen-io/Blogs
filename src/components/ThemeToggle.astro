@@ -1,0 +1,13 @@
+<button id="theme-toggle">Toggle-Theme</button>
+<script>
+  const btn = document.getElementById("theme-toggle");
+
+  btn.addEventListener("click", () => {
+    const current = document.documentElement.dataset.theme;
+    const newTheme = current === "dark" ? "light" : "dark";
+
+    document.documentElement.dataset.theme = newTheme;
+    localStorage.setItem("theme", newTheme);
+  });
+</script>
+
