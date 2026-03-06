@@ -1,52 +1,41 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-import { getCollection } from 'astro:content';
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
 
-const allPosts = await getCollection('blog');
-
+const allPosts = await getCollection("blog");
 ---
 
+<Layout>
 
-<!doctype html>
-<html lang="en">
-    <head>
-        <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-    </head>
-    <body>
-        <Header />
-        <main>
-            <h3 class="text-4xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
-                Hey, I'm Dinesh.
-            </h3>
-            <p class="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-                I build software and web-appliactions and love to write content around programming
-            </p>
-            <section class="space-y-8">
-                <p>
-                Here’s a list of my writing: 
-                </p>
+    <h3 class="text-4xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
+        Hey, I'm Dinesh.
+    </h3>
 
-                <ul class="space-y-8" style="list-style-type:square;">
-                    {allPosts.map((post) => (
-                    <li class="group flex items-start gap-4">
-                        <div class="mt-2 h-3 w-3 flex-shrink-0 bg-slate-800 dark:bg-slate-200 group-hover:bg-blue-600 group-hover:rotate-45 transition-all duration-300"></div>
+    <p class="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
+        I build software and web-applications and love to write content around programming
+    </p>
 
-                        <a href={`/blog/${post.id}`} class="flex flex-col gap-1">
-                            <span class="text-xl font-bold tracking-tight group-hover:text-blue-600 transition-colors">
-                                {post.data.title}
-                            </span>
-                            <span class="text-sm font-medium text-slate-500 tabular-nums">
-                                {post.data.updatedDate}
-                            </span>
-                        </a>
-                    </li>
-                    ))}
-                </ul>
-            </section>
-        </main>
-        <Footer />
-    </body>
-</html>
+    <section class="space-y-8">
+        <p>Here’s a list of my writing:</p>
+
+        <ul class="space-y-8" style="list-style-type:square;">
+            {allPosts.map((post) => (
+            <li class="group flex items-start gap-4">
+                <div class="mt-2 h-3 w-3 flex-shrink-0 bg-slate-800 dark:bg-slate-200 group-hover:bg-blue-600 group-hover:rotate-45 transition-all duration-300"></div>
+
+                <a href={`/blog/${post.id}`} class="flex flex-col gap-1">
+                    <span class="text-xl font-bold tracking-tight group-hover:text-blue-600 transition-colors">
+                        {post.data.title}
+                    </span>
+
+                    <span class="text-sm font-medium text-slate-500 tabular-nums">
+                        {post.data.updatedDate}
+                    </span>
+
+                </a>
+            </li>
+))}
+        </ul>
+    </section>
+
+</Layout>
