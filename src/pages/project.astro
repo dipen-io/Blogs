@@ -1,0 +1,23 @@
+---
+import FeaturedProject from "../components/ProjectCard.astro";
+import "../styles/global.css";
+---
+
+<FeaturedProject
+  title="BPF Social Media App"
+  image="/images/app.png"
+  playstore="https://play.google.com/store/apps/details?id=com.kodevana.bpf&hl=en_IN"
+  tech={[
+    "React Native",
+    "Node.js",
+    "Express.js",
+    "MongoDB",
+    "Cloudinary",
+    "Render"
+  ]}
+  description="A social media mobile application built for the BPF (Bodoland People's Front) political party. The app allows supporters to join the party by filling out a membership form, donate to the party, and stay updated with party activities.
+
+It includes multiple user roles such as admin, members, and general users. Admins can create posts, manage content, and host video calls for members. The app also features an event section where users can see upcoming political events and activities.
+
+I developed the complete backend system using Node.js and Express, designed the MongoDB database, integrated Cloudinary for media storage, and deployed the backend on Render. I also contributed to updating the React Native mobile application."
+/>
