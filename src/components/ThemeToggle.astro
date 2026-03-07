@@ -1,13 +1,34 @@
-<button id="theme-toggle">Toggle-Theme</button>
+<select id="theme-select" class="border-none outline-none text-xl text-blue-500">
+    <option>theme</option>
+</select>
 <script>
-  const btn = document.getElementById("theme-toggle");
+const themes = ["light", "dark"];
+const select = document.getElementById("theme-select") as HTMLSelectElement | null; 
 
-  btn.addEventListener("click", () => {
-    const current = document.documentElement.dataset.theme;
-    const newTheme = current === "dark" ? "light" : "dark";
+// populate dropdown
+themes.forEach(theme => {
+    const option = document.createElement("option");
+    option.value = theme;
+    option.textContent = theme;
+    if (select) {
+        select.appendChild(option);
+    }
+});
 
-    document.documentElement.dataset.theme = newTheme;
-    localStorage.setItem("theme", newTheme);
-  });
+// load saved theme
+const savedTheme = localStorage.getItem("theme") || "light";
+document.documentElement.dataset.theme = savedTheme;
+if (select){
+    select.value  = savedTheme;
+}
+
+// change theme
+if (select) {
+    select.addEventListener("change", (e) => {
+        const theme = (e.currentTarget as HTMLSelectElement).value;
+        document.documentElement.dataset.theme = theme;
+        localStorage.setItem("theme", theme);
+
+    });
+}
 </script>
-

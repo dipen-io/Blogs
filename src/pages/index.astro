@@ -18,13 +18,13 @@ const allPosts = await getCollection("blog");
     <section class="space-y-8">
         <p>Here’s a list of my writing:</p>
 
-        <ul class="space-y-8" style="list-style-type:square;">
+        <ul class="space-y-2" style="list-style-type:square;">
             {allPosts.map((post) => (
             <li class="group flex items-start gap-4">
-                <div class="mt-2 h-3 w-3 flex-shrink-0 bg-slate-800 dark:bg-slate-200 group-hover:bg-blue-600 group-hover:rotate-45 transition-all duration-300"></div>
+                <div class="mt-2 h-3 w-3 shrink-0 bg-slate-800 dark:bg-slate-200 group-hover:bg-blue-600 group-hover:rotate-45 transition-all duration-300"></div>
 
                 <a href={`/blog/${post.id}`} class="flex flex-col gap-1">
-                    <span class="text-xl font-bold tracking-tight group-hover:text-blue-600 transition-colors">
+                    <span class="hover:underline tracking-tight group-hover:text-blue-600 transition-colors">
                         {post.data.title}
                     </span>
 

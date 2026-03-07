@@ -1,0 +1,752 @@
+---
+// About.astro
+const skills = {
+  languages: ["HTML", "CSS", "JavaScript", "C", "C++", "SQL", "PHP"],
+  frontend: ["React", "Next.js"],
+    backend: ["Node.js", "Express", "Prisma", "MongoDB", "Redis", "Bun", "Nest.js", "Laravel"],
+  tools: ["AWS (S3, EC2)", "Cloudinary", "Git", "Linux", "Neovim", "Docker", "Postman", "Nginx"]
+};
+
+const experiences = [
+  {
+    role: "Frontend Developer",
+    type: "Part-Time, Remote",
+    company: "Last Minutes of Deal",
+    companyUrl: "https://lastminutesofdeal.com",
+    location: "E-commerce Startup",
+    period: "Aug 2025 - 3 mounth ",
+    highlights: [
+      "Developing scalable e-commerce features with Next.js",
+      "Building responsive, user-friendly interfaces",
+      "Transitioning into backend development"
+    ]
+  }
+];
+
+const education = [
+  {
+    degree: "Bachelor of Computer Applications (BCA)",
+    school: "Rangia College",
+    location: "Rangia, Assam",
+    period: "2020 - 2023",
+    grade: "CGPA: 7.58/10"
+  },
+  {
+    degree: "PCMB (Science)",
+    school: "Tamulpur HS School",
+    location: "Tamulpur",
+    period: "2018 - 2020",
+    grade: "61%"
+  }
+];
+---
+
+<section class="about-section" id="about">
+  <div class="container">
+    
+    <!-- Hero Intro -->
+    <div class="intro-grid">
+      <div class="intro-content">
+        <span class="section-tag">About Me</span>
+        <h1 class="title">
+          Dipen Boro
+          <span class="title-accent">Full-Stack Developer</span>
+        </h1>
+        <p class="location">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          Rangia, Assam, India
+        </p>
+        <p class="bio">
+          Passionate Full-Stack Developer with expertise in building scalable web applications. 
+          Experienced in modern JavaScript frameworks, cloud infrastructure, and database design. 
+          Currently contributing to e-commerce solutions while expanding into backend architecture.
+        </p>
+        
+        <div class="cta-group">
+          <a href="https://dipen-io.github.io" target="_blank" class="btn btn-primary">
+            <span>View Portfolio</span>
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+          </a>
+          <div class="social-links">
+            <a href="tel:+919365646114" class="social-btn" title="Phone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+            </a>
+            <a href="https://github.com/dipen-io" target="_blank" class="social-btn" title="GitHub">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+            </a>
+            <a href="https://www.linkedin.com/in/dipenboro" target="_blank" class="social-btn" title="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="intro-visual">
+        <div class="code-window">
+          <div class="window-header">
+            <div class="window-dot red"></div>
+            <div class="window-dot yellow"></div>
+            <div class="window-dot green"></div>
+            <span class="window-title">developer.json</span>
+          </div>
+          <div class="window-content">
+            <pre><code><span class="code-key">"name"</span>: <span class="code-string">"Dipen Boro"</span>,
+<span class="code-key">"role"</span>: <span class="code-string">"Full-Stack Developer"</span>,
+<span class="code-key">"location"</span>: <span class="code-string">"Assam, India"</span>,
+<span class="code-key">"experience"</span>: <span class="code-number">1</span>,
+<span class="code-key">"skills"</span>: [<span class="code-string">"React"</span>, <span class="code-string">"Node.js"</span>, ...],
+<span class="code-key">"available"</span>: <span class="code-bool">true</span></code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skills Grid -->
+    <div class="skills-section">
+      <h2 class="section-title">Technical Expertise</h2>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <div class="skill-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </div>
+          <h3>Languages</h3>
+          <div class="skill-tags">
+            {skills.languages.map(lang => <span class="tag">{lang}</span>)}
+          </div>
+        </div>
+        
+        <div class="skill-card">
+          <div class="skill-icon frontend">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+          </div>
+          <h3>Frontend</h3>
+          <div class="skill-tags">
+            {skills.frontend.map(skill => <span class="tag">{skill}</span>)}
+          </div>
+        </div>
+        
+        <div class="skill-card">
+          <div class="skill-icon backend">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            </svg>
+          </div>
+          <h3>Backend</h3>
+          <div class="skill-tags">
+            {skills.backend.map(skill => <span class="tag">{skill}</span>)}
+          </div>
+        </div>
+        
+        <div class="skill-card">
+          <div class="skill-icon tools">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+            </svg>
+          </div>
+          <h3>Tools & Cloud</h3>
+          <div class="skill-tags">
+            {skills.tools.map(tool => <span class="tag">{tool}</span>)}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Experience Timeline -->
+    <div class="experience-section">
+      <h2 class="section-title">Work Experience</h2>
+      <div class="timeline">
+        {experiences.map(exp => (
+          <div class="timeline-item">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-header">
+                <h3>{exp.role}</h3>
+                <span class="timeline-type">{exp.type}</span>
+              </div>
+              <div class="timeline-company">
+                <a href={exp.companyUrl} target="_blank" class="company-link">
+                  {exp.company}
+                  <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </a>
+                <span class="timeline-location">{exp.location}</span>
+              </div>
+              <span class="timeline-date">{exp.period}</span>
+              <ul class="timeline-highlights">
+                {exp.highlights.map(highlight => (
+                  <li>{highlight}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+        
+        <div class="timeline-item freelance">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content">
+            <h3>Freelance Full-Stack Developer</h3>
+            <p class="freelance-desc">
+              Collaborated with clients to deliver full-stack solutions using Node.js, MongoDB, and AWS.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Education -->
+    <div class="education-section">
+      <h2 class="section-title">Education</h2>
+      <div class="education-grid">
+        {education.map(edu => (
+          <div class="education-card">
+            <div class="education-year">{edu.period}</div>
+            <h3>{edu.degree}</h3>
+            <p class="education-school">{edu.school}</p>
+            <p class="education-location">{edu.location}</p>
+            <span class="education-grade">{edu.grade}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .about-section {
+    padding: 4rem 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* Intro Grid */
+  .intro-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    margin-bottom: 5rem;
+  }
+
+  @media (min-width: 968px) {
+    .intro-grid {
+      grid-template-columns: 1.2fr 1fr;
+      align-items: center;
+    }
+  }
+
+  .section-tag {
+    display: inline-block;
+    color: #22c55e;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    color: rgb(var(--gray-dark));
+    margin-bottom: 0.5rem;
+  }
+
+  .title-accent {
+    display: block;
+    font-size: 0.5em;
+    font-weight: 600;
+    color: #22c55e;
+    margin-top: 0.5rem;
+  }
+
+  .location {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgb(var(--gray-dark));
+    opacity: 0.7;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .bio {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: rgb(var(--gray-dark));
+    opacity: 0.85;
+    margin-bottom: 2rem;
+    max-width: 540px;
+  }
+
+  .cta-group {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: white;
+    box-shadow: 0 10px 30px -10px rgba(34, 197, 94, 0.4);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px -10px rgba(34, 197, 94, 0.5);
+  }
+
+  .btn-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .social-links {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(var(--gray-light), 0.5);
+    border: 1px solid rgba(var(--gray-dark), 0.1);
+    color: rgb(var(--gray-dark));
+    transition: all 0.3s ease;
+  }
+
+  .social-btn:hover {
+    background: #22c55e;
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .social-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Code Window */
+  .intro-visual {
+    display: flex;
+    justify-content: center;
+  }
+
+  .code-window {
+    background: #1e1e2e;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    max-width: 400px;
+    transform: rotate(2deg);
+    transition: transform 0.3s ease;
+  }
+
+  .code-window:hover {
+    transform: rotate(0deg) scale(1.02);
+  }
+
+  .window-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: #181825;
+    border-bottom: 1px solid #313244;
+  }
+
+  .window-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .window-dot.red { background: #f38ba8; }
+  .window-dot.yellow { background: #f9e2af; }
+  .window-dot.green { background: #a6e3a1; }
+
+  .window-title {
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: #6c7086;
+    font-family: monospace;
+  }
+
+  .window-content {
+    padding: 1.5rem;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  .window-content pre {
+    margin: 0;
+    white-space: pre-wrap;
+  }
+
+  .code-key { color: #f38ba8; }
+  .code-string { color: #a6e3a1; }
+  .code-number { color: #fab387; }
+  .code-bool { color: #89b4fa; }
+
+  /* Skills Section */
+  .skills-section {
+    margin-bottom: 5rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: rgb(var(--gray-dark));
+    margin-bottom: 2rem;
+    position: relative;
+    display: inline-block;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, #22c55e, transparent);
+    border-radius: 2px;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .skills-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .skill-card {
+    background: rgba(var(--gray-light), 0.3);
+    border: 1px solid rgba(var(--gray-dark), 0.1);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .skill-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
+    border-color: rgba(34, 197, 94, 0.3);
+  }
+
+  .skill-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  .skill-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .skill-card h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: rgb(var(--gray-dark));
+    margin-bottom: 1rem;
+  }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    padding: 0.375rem 0.875rem;
+    background: rgba(var(--gray-light), 0.8);
+    border: 1px solid rgba(var(--gray-dark), 0.1);
+    border-radius: 2rem;
+    font-size: 0.875rem;
+    color: rgb(var(--gray-dark));
+    transition: all 0.2s ease;
+  }
+
+  .tag:hover {
+    background: #22c55e;
+    color: white;
+    border-color: #22c55e;
+  }
+
+  /* Experience Timeline */
+  .experience-section {
+    margin-bottom: 5rem;
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, #22c55e, rgba(34, 197, 94, 0.2));
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 3rem;
+  }
+
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .timeline-marker {
+    position: absolute;
+    left: -2rem;
+    top: 0.5rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #22c55e;
+    border: 3px solid rgb(var(--gray-light));
+    transform: translateX(-5px);
+  }
+
+  .timeline-content {
+    background: rgba(var(--gray-light), 0.3);
+    border: 1px solid rgba(var(--gray-dark), 0.1);
+    border-radius: 1rem;
+    padding: 1.5rem;
+  }
+
+  .timeline-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline-content h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: rgb(var(--gray-dark));
+  }
+
+  .timeline-type {
+    padding: 0.25rem 0.75rem;
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    border-radius: 2rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .timeline-company {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+  }
+
+  .company-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: #22c55e;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .company-link:hover {
+    text-decoration: underline;
+  }
+
+  .link-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .timeline-location {
+    color: rgb(var(--gray-dark));
+    opacity: 0.6;
+    font-size: 0.875rem;
+  }
+
+  .timeline-date {
+    display: block;
+    color: rgb(var(--gray-dark));
+    opacity: 0.7;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+  }
+
+  .timeline-highlights {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .timeline-highlights li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: rgb(var(--gray-dark));
+    opacity: 0.85;
+    font-size: 0.95rem;
+  }
+
+  .timeline-highlights li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: #22c55e;
+    font-weight: 600;
+  }
+
+  .freelance .timeline-content {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.05), rgba(34, 197, 94, 0.1));
+  }
+
+  .freelance-desc {
+    color: rgb(var(--gray-dark));
+    opacity: 0.85;
+    line-height: 1.6;
+  }
+
+  /* Education */
+  .education-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .education-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .education-card {
+    background: rgba(var(--gray-light), 0.3);
+    border: 1px solid rgba(var(--gray-dark), 0.1);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .education-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #22c55e, #16a34a);
+  }
+
+  .education-year {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    border-radius: 2rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .education-card h3 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: rgb(var(--gray-dark));
+    margin-bottom: 0.5rem;
+  }
+
+  .education-school {
+    color: rgb(var(--gray-dark));
+    opacity: 0.8;
+    font-weight: 500;
+  }
+
+  .education-location {
+    color: rgb(var(--gray-dark));
+    opacity: 0.6;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .education-grade {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: rgba(var(--gray-light), 0.8);
+    border-radius: 2rem;
+    font-size: 0.875rem;
+    color: rgb(var(--gray-dark));
+    font-weight: 600;
+  }
+</style>
