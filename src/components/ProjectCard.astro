@@ -8,7 +8,7 @@ const {
 } = Astro.props;
 ---
 
-<section class="project-section">
+<section class="project-section ">
   <div class="container">
     <div class="project-grid">
       
@@ -85,20 +85,8 @@ const {
   .project-section {
     position: relative;
     padding: 6rem 1.5rem;
-    background: linear-gradient(135deg, #0a0a0f 0%, #12121a 50%, #0a0a0f 100%);
-    overflow: hidden;
-  }
-
-  .project-section::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle at 30% 20%, rgba(74, 222, 128, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 70% 80%, rgba(34, 197, 94, 0.03) 0%, transparent 50%);
-    pointer-events: none;
+    /* REMOVE the hardcoded background - let global.css handle it */
+    background: transparent;
   }
 
   .container {
@@ -131,7 +119,7 @@ const {
   .image-glow {
     position: absolute;
     inset: -20px;
-    background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(74, 222, 128, 0.1));
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(74, 222, 128, 0.15));
     filter: blur(60px);
     border-radius: 3rem;
     opacity: 0.6;
@@ -150,8 +138,8 @@ const {
     transform-style: preserve-3d;
     transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
     box-shadow: 
-      0 25px 50px -12px rgba(0, 0, 0, 0.5),
-      0 0 0 1px rgba(255, 255, 255, 0.05);
+      0 25px 50px -12px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(0, 0, 0, 0.05);
   }
 
   .image-wrapper:hover .image-container {
@@ -226,7 +214,7 @@ const {
     50% { opacity: 0.5; transform: scale(1.2); }
   }
 
-  /* Content Styles */
+  /* Content Styles - Use CSS variables from global.css */
   .content-wrapper {
     display: flex;
     flex-direction: column;
@@ -243,7 +231,7 @@ const {
     display: flex;
     align-items: center;
     gap: 1rem;
-    color: #22c55e;
+    color: #22c55e; /* Keep accent color */
     font-size: 0.875rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -259,23 +247,22 @@ const {
   .project-title {
     font-size: clamp(2rem, 5vw, 3.5rem);
     font-weight: 800;
-    color: white;
+    /* USE CSS VARIABLE for automatic dark mode switching */
+    color: rgb(var(--gray-dark));
     line-height: 1.1;
     letter-spacing: -0.02em;
-    background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
   }
 
   .project-description {
     font-size: 1.125rem;
     line-height: 1.8;
-    color: #a1a1aa;
+    /* USE CSS VARIABLE */
+    color: rgb(var(--gray-dark));
+    opacity: 0.8;
     max-width: 540px;
   }
 
-  /* Tech Stack */
+  /* Tech Stack - Use CSS variables */
   .tech-section {
     display: flex;
     flex-direction: column;
@@ -284,7 +271,9 @@ const {
 
   .tech-label {
     font-size: 0.875rem;
-    color: #71717a;
+    /* USE CSS VARIABLE */
+    color: rgb(var(--gray-dark));
+    opacity: 0.6;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -301,10 +290,12 @@ const {
     align-items: center;
     gap: 0.5rem;
     padding: 0.625rem 1rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    /* USE CSS VARIABLES for background and border */
+    background: rgba(var(--gray-light), 0.5);
+    border: 1px solid rgba(var(--gray-dark), 0.1);
     border-radius: 0.75rem;
-    color: #e4e4e7;
+    /* USE CSS VARIABLE */
+    color: rgb(var(--gray-dark));
     font-size: 0.875rem;
     font-weight: 500;
     transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
@@ -328,7 +319,7 @@ const {
     background: rgba(34, 197, 94, 0.1);
     border-color: rgba(34, 197, 94, 0.3);
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px -5px rgba(34, 197, 94, 0.2);
+    box-shadow: 0 10px 20px -5px rgba(34, 197, 94, 0.15);
   }
 
   .tech-dot {
