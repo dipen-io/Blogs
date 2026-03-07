@@ -81,12 +81,13 @@ const {
   </div>
 </section>
 
+
 <style>
+  /* REMOVE background isolation - let global.css handle it */
   .project-section {
     position: relative;
     padding: 6rem 1.5rem;
-    /* REMOVE the hardcoded background - let global.css handle it */
-    background: transparent;
+    /* No background here - inherits from body */
   }
 
   .container {
@@ -116,30 +117,17 @@ const {
     perspective: 1000px;
   }
 
-  .image-glow {
-    position: absolute;
-    inset: -20px;
-    background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(74, 222, 128, 0.15));
-    filter: blur(60px);
-    border-radius: 3rem;
-    opacity: 0.6;
-    animation: pulse-glow 4s ease-in-out infinite;
-  }
-
-  @keyframes pulse-glow {
-    0%, 100% { opacity: 0.4; transform: scale(1); }
-    50% { opacity: 0.7; transform: scale(1.05); }
-  }
-
   .image-container {
     position: relative;
     border-radius: 2rem;
     overflow: hidden;
     transform-style: preserve-3d;
     transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-    box-shadow: 
-      0 25px 50px -12px rgba(0, 0, 0, 0.15),
-      0 0 0 1px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+
+  :global([data-theme="dark"]) .image-container {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   }
 
   .image-wrapper:hover .image-container {
@@ -157,64 +145,7 @@ const {
     transform: scale(1.05);
   }
 
-  .image-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      135deg,
-      transparent 0%,
-      rgba(34, 197, 94, 0.1) 50%,
-      transparent 100%
-    );
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-
-  .image-wrapper:hover .image-overlay {
-    opacity: 1;
-  }
-
-  .floating-badge {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    background: linear-gradient(135deg, #22c55e, #16a34a);
-    padding: 0.75rem 1.25rem;
-    border-radius: 2rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    box-shadow: 0 10px 30px -5px rgba(34, 197, 94, 0.4);
-    animation: float 3s ease-in-out infinite;
-    z-index: 10;
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-
-  .badge-text {
-    color: white;
-    font-size: 0.875rem;
-    font-weight: 600;
-    letter-spacing: 0.025em;
-  }
-
-  .badge-pulse {
-    width: 8px;
-    height: 8px;
-    background: white;
-    border-radius: 50%;
-    animation: pulse-dot 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse-dot {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.2); }
-  }
-
-  /* Content Styles - Use CSS variables from global.css */
+  /* Content Styles - Use CSS variables */
   .content-wrapper {
     display: flex;
     flex-direction: column;
@@ -231,7 +162,7 @@ const {
     display: flex;
     align-items: center;
     gap: 1rem;
-    color: #22c55e; /* Keep accent color */
+    color: #22c55e;
     font-size: 0.875rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -247,7 +178,6 @@ const {
   .project-title {
     font-size: clamp(2rem, 5vw, 3.5rem);
     font-weight: 800;
-    /* USE CSS VARIABLE for automatic dark mode switching */
     color: rgb(var(--gray-dark));
     line-height: 1.1;
     letter-spacing: -0.02em;
@@ -256,13 +186,12 @@ const {
   .project-description {
     font-size: 1.125rem;
     line-height: 1.8;
-    /* USE CSS VARIABLE */
     color: rgb(var(--gray-dark));
-    opacity: 0.8;
+    opacity: 0.85;
     max-width: 540px;
   }
 
-  /* Tech Stack - Use CSS variables */
+  /* Tech Stack */
   .tech-section {
     display: flex;
     flex-direction: column;
@@ -271,7 +200,6 @@ const {
 
   .tech-label {
     font-size: 0.875rem;
-    /* USE CSS VARIABLE */
     color: rgb(var(--gray-dark));
     opacity: 0.6;
     font-weight: 500;
@@ -290,36 +218,19 @@ const {
     align-items: center;
     gap: 0.5rem;
     padding: 0.625rem 1rem;
-    /* USE CSS VARIABLES for background and border */
-    background: rgba(var(--gray-light), 0.5);
-    border: 1px solid rgba(var(--gray-dark), 0.1);
+    background: rgba(var(--gray-light), 0.6);
+    border: 1px solid rgba(var(--gray-dark), 0.15);
     border-radius: 0.75rem;
-    /* USE CSS VARIABLE */
     color: rgb(var(--gray-dark));
     font-size: 0.875rem;
     font-weight: 500;
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-    animation: fade-in-up 0.6s ease-out backwards;
-    animation-delay: var(--delay);
-    cursor: default;
-  }
-
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    transition: all 0.3s ease;
   }
 
   .tech-item:hover {
-    background: rgba(34, 197, 94, 0.1);
-    border-color: rgba(34, 197, 94, 0.3);
+    background: rgba(34, 197, 94, 0.15);
+    border-color: rgba(34, 197, 94, 0.4);
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px -5px rgba(34, 197, 94, 0.15);
   }
 
   .tech-dot {
@@ -327,7 +238,6 @@ const {
     height: 6px;
     background: #22c55e;
     border-radius: 50%;
-    box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
   }
 
   /* CTA Button */
@@ -344,36 +254,25 @@ const {
     border-radius: 1rem;
     text-decoration: none;
     overflow: hidden;
-    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-    box-shadow: 
-      0 20px 40px -10px rgba(34, 197, 94, 0.3),
-      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    transition: transform 0.3s ease;
+    box-shadow: 0 20px 40px -10px rgba(34, 197, 94, 0.3);
   }
 
   .playstore-btn:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 
-      0 30px 60px -15px rgba(34, 197, 94, 0.4),
-      0 0 0 1px rgba(255, 255, 255, 0.2) inset;
-  }
-
-  .playstore-btn:active {
-    transform: translateY(0) scale(0.98);
+    transform: translateY(-2px);
+    box-shadow: 0 30px 60px -15px rgba(34, 197, 94, 0.4);
   }
 
   .btn-content {
     display: flex;
     align-items: center;
     gap: 1rem;
-    position: relative;
-    z-index: 2;
   }
 
   .play-icon {
     width: 28px;
     height: 28px;
     color: white;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
   }
 
   .btn-text {
@@ -392,19 +291,6 @@ const {
     font-size: 1.25rem;
     color: white;
     font-weight: 700;
-    letter-spacing: -0.01em;
-  }
-
-  .btn-glow {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
-    transform: translateX(-100%);
-    transition: transform 0.6s ease;
-  }
-
-  .playstore-btn:hover .btn-glow {
-    transform: translateX(100%);
   }
 
   /* Responsive */
@@ -415,11 +301,6 @@ const {
     
     .image-wrapper {
       order: -1;
-    }
-    
-    .floating-badge {
-      top: 10px;
-      right: 10px;
     }
   }
 </style>
