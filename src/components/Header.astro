@@ -49,50 +49,50 @@ import '../styles/global.css';
 </header>
 
 <script>
-    const btn = document.getElementById("menu-btn");
-    const menu = document.getElementById("mobile-menu");
-    const line1 = document.getElementById("line-1");
-    const line2 = document.getElementById("line-2");
-    const line3 = document.getElementById("line-3");
+const btn = document.getElementById("menu-btn");
+const menu = document.getElementById("mobile-menu");
+const line1 = document.getElementById("line-1");
+const line2 = document.getElementById("line-2");
+const line3 = document.getElementById("line-3");
 
-    function toggleMenu() {
-        const isOpen = !menu.classList.contains("hidden");
-        
-        // Toggle menu visibility
-        menu.classList.toggle("hidden");
-        menu.classList.toggle("flex");
-        
-        // Update aria
-        btn.setAttribute("aria-expanded", !isOpen);
-        
-        // Animate hamburger to X
-        if (!isOpen) {
-            line1.classList.add("rotate-45", "translate-y-2");
-            line2.classList.add("opacity-0");
-            line3.classList.add("-rotate-45", "-translate-y-2");
-        } else {
-            line1.classList.remove("rotate-45", "translate-y-2");
-            line2.classList.remove("opacity-0");
-            line3.classList.remove("-rotate-45", "-translate-y-2");
-        }
+function toggleMenu() {
+    const isOpen = !menu.classList.contains("hidden");
+
+    // Toggle menu visibility
+    menu.classList.toggle("hidden");
+    menu.classList.toggle("flex");
+
+    // Update aria
+    btn.setAttribute("aria-expanded", !isOpen);
+
+    // Animate hamburger to X
+    if (!isOpen) {
+        line1.classList.add("rotate-45", "translate-y-2");
+        line2.classList.add("opacity-0");
+        line3.classList.add("-rotate-45", "-translate-y-2");
+    } else {
+        line1.classList.remove("rotate-45", "translate-y-2");
+        line2.classList.remove("opacity-0");
+        line3.classList.remove("-rotate-45", "-translate-y-2");
     }
+}
 
-    btn.addEventListener("click", (e) => {
-        e.stopPropagation();
+btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleMenu();
+});
+
+// Close menu when clicking outside
+document.addEventListener("click", (e) => {
+    if (!menu.classList.contains("hidden") && !menu.contains(e.target) && !btn.contains(e.target)) {
         toggleMenu();
-    });
+    }
+});
 
-    // Close menu when clicking outside
-    document.addEventListener("click", (e) => {
-        if (!menu.classList.contains("hidden") && !menu.contains(e.target) && !btn.contains(e.target)) {
-            toggleMenu();
-        }
-    });
-
-    // Close menu on resize to desktop
-    window.addEventListener("resize", () => {
-        if (window.innerWidth >= 640 && !menu.classList.contains("hidden")) {
-            toggleMenu();
-        }
-    });
+// Close menu on resize to desktop
+window.addEventListener("resize", () => {
+    if (window.innerWidth >= 640 && !menu.classList.contains("hidden")) {
+        toggleMenu();
+    }
+});
 </script>
