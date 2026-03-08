@@ -5,46 +5,94 @@ import ToggleTheme from './ThemeToggle.astro';
 import '../styles/global.css';
 ---
 
-    <header class="px-4 shadow-xl  ">
-	<nav class="flex items-center justify-between">
-		
-		<h2 class="m-0 text-lg font-semibold">
-			<a href="/" class="no-underline text-gray-900 dark:text-gray-200">
-				{SITE_TITLE}
-			</a>
-		</h2>
+<header class="px-4 shadow-xl relative z-50">
+    <nav class="flex items-center justify-between py-3">
+        <h2 class="m-0 text-base sm:text-lg md:text-xl font-semibold">
+            <a href="/" class="no-underline text-gray-900 dark:text-gray-200">
+                {SITE_TITLE}
+            </a>
+        </h2>
 
-		<div class="flex items-center gap-4">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/project">Projects</HeaderLink>
+        <!-- Hamburger Button (mobile only) -->
+        <button 
+            id="menu-btn" 
+            class="sm:hidden flex flex-col gap-1.5 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            aria-label="Toggle menu"
+            aria-expanded="false"
+        >
+            <span class="w-6 h-0.5 bg-gray-800 dark:bg-gray-200 transition-transform origin-center" id="line-1"></span>
+            <span class="w-6 h-0.5 bg-gray-800 dark:bg-gray-200 transition-opacity" id="line-2"></span>
+            <span class="w-6 h-0.5 bg-gray-800 dark:bg-gray-200 transition-transform origin-center" id="line-3"></span>
+        </button>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden sm:flex items-center gap-4">
+            <HeaderLink href="/">Home</HeaderLink>
+            <HeaderLink href="/project">Projects</HeaderLink>
             <HeaderLink href="/about">About</HeaderLink>
             <ToggleTheme />
-		</div>
+        </div>
+    </nav>
 
-		<div class="hidden md:flex items-center gap-3">
-			<!-- <a href="https://m.webtoo.ls/@astro" target="_blank" class="text-gray-700 hover:text-blue-500"> -->
-			<!-- 	<span class="sr-only">Follow Astro on Mastodon</span> -->
-			<!-- 	<svg viewBox="0 0 16 16" aria-hidden="true" width="28" height="28"> -->
-			<!-- 		<path fill="currentColor" -->
-			<!-- 			d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603..." /> -->
-			<!-- 	</svg> -->
-			<!-- </a> -->
-
-			<!-- <a href="https://twitter.com/astrodotbuild" target="_blank" class="text-gray-700 hover:text-blue-500"> -->
-			<!-- 	<span class="sr-only">Follow Astro on Twitter</span> -->
-			<!-- 	<svg viewBox="0 0 16 16" aria-hidden="true" width="28" height="28"> -->
-			<!-- 		<path fill="currentColor" -->
-			<!-- 			d="M5.026 15c6.038 0 9.341-5.003..." /> -->
-			<!-- 	</svg> -->
-			<!-- </a> -->
-
-			<!-- <a href="https://github.com/withastro/astro" target="_blank" class="text-gray-700 hover:text-blue-500"> -->
-			<!-- 	<span class="sr-only">Go to Astro's GitHub repo</span> -->
-			<!-- 	<svg viewBox="0 0 16 16" aria-hidden="true" width="28" height="28"> -->
-			<!-- 		<path fill="currentColor" -->
-			<!-- 			d="M8 0C3.58 0 0 3.58..." /> -->
-			<!-- 	</svg> -->
-			<!-- </a> -->
-		</div>
-	</nav>
+    <!-- Mobile Menu (moved outside nav for full-width overlay) -->
+    <div 
+        id="mobile-menu" 
+        class="hidden absolute top-full left-0 right-0 bg-white dark:bg-gray-900 shadow-lg border-t border-gray-200  sm:hidden flex-col p-4 gap-3 z-40"
+    >
+        <HeaderLink href="/" class="block py-2 px-3 rounded hover:bg-gray-100 ">Home</HeaderLink>
+        <HeaderLink href="/project" class="block py-2 px-3 rounded hover:bg-gray-100">Projects</HeaderLink>
+        <HeaderLink href="/about" class="block py-2 px-3 rounded hover:bg-gray-100 ">About</HeaderLink>
+        <!-- <div class="pt-2 py "> -->
+        <!--     <ToggleTheme /> -->
+        <!-- </div> -->
+    </div>
 </header>
+
+<script>
+const btn = document.getElementById("menu-btn");
+const menu = document.getElementById("mobile-menu");
+const line1 = document.getElementById("line-1");
+const line2 = document.getElementById("line-2");
+const line3 = document.getElementById("line-3");
+
+function toggleMenu() {
+    const isOpen = !menu.classList.contains("hidden");
+
+    // Toggle menu visibility
+    menu.classList.toggle("hidden");
+    menu.classList.toggle("flex");
+
+    // Update aria
+    btn.setAttribute("aria-expanded", !isOpen);
+
+    // Animate hamburger to X
+    if (!isOpen) {
+        line1.classList.add("rotate-45", "translate-y-2");
+        line2.classList.add("opacity-0");
+        line3.classList.add("-rotate-45", "-translate-y-2");
+    } else {
+        line1.classList.remove("rotate-45", "translate-y-2");
+        line2.classList.remove("opacity-0");
+        line3.classList.remove("-rotate-45", "-translate-y-2");
+    }
+}
+
+btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleMenu();
+});
+
+// Close menu when clicking outside
+document.addEventListener("click", (e) => {
+    if (!menu.classList.contains("hidden") && !menu.contains(e.target) && !btn.contains(e.target)) {
+        toggleMenu();
+    }
+});
+
+// Close menu on resize to desktop
+window.addEventListener("resize", () => {
+    if (window.innerWidth >= 640 && !menu.classList.contains("hidden")) {
+        toggleMenu();
+    }
+});
+</script>
