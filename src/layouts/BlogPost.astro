@@ -12,70 +12,106 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 // Structured data for Google
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const schema = {
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": title,
-  "description": description,
-  "datePublished": pubDate?.toISOString(),
-  "dateModified": updatedDate?.toISOString() ?? pubDate?.toISOString(),
-  "image": heroImage ? new URL(heroImage.src ?? heroImage, Astro.site).href : undefined,
-  "url": canonicalURL.href,
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "description": description,
+    "datePublished": pubDate?.toISOString(),
+    "dateModified": updatedDate?.toISOString() ?? pubDate?.toISOString(),
+    "image": heroImage ? new URL(heroImage.src ?? heroImage, Astro.site).href : undefined,
+    "url": canonicalURL.href,
 };
 ---
 
 <html lang="en">
-  <head>
-    <BaseHead title={title} description={description} />
+    <head>
+        <BaseHead title={title} description={description} />
 
-    <!-- Canonical URL -->
-    <link rel="canonical" href={canonicalURL} />
+        <!-- Canonical URL -->
+        <link rel="canonical" href={canonicalURL} />
 
-    <!-- Open Graph -->
-    <meta property="og:type" content="article" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonicalURL} />
-    {heroImage && <meta property="og:image" content={new URL(heroImage.src ?? heroImage, Astro.site).href} />}
-    <meta property="article:published_time" content={pubDate?.toISOString()} />
-    {updatedDate && <meta property="article:modified_time" content={updatedDate.toISOString()} />}
+        <!-- Open Graph -->
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonicalURL} />
+        {heroImage && <meta property="og:image" content={new URL(heroImage.src ?? heroImage, Astro.site).href} />}
+        <meta property="article:published_time" content={pubDate?.toISOString()} />
+        {updatedDate && <meta property="article:modified_time" content={updatedDate.toISOString()} />}
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    {heroImage && <meta name="twitter:image" content={new URL(heroImage.src ?? heroImage, Astro.site).href} />}
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        {heroImage && <meta name="twitter:image" content={new URL(heroImage.src ?? heroImage, Astro.site).href} />}
 
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+        <!-- JSON-LD Structured Data -->
+        <script type="application/ld+json" set:html={JSON.stringify(schema)} />
 
-    <style>
-      /* ... your existing styles unchanged ... */
-    </style>
-  </head>
-  <body>
-    <Header />
-    <main>
-      <article>
-        <div class="hero-image">
-          {heroImage && <Image width={1020} height={510} src={heroImage} alt={title} />}
-        </div>
-        <div class="prose">
-          <div class="title">
-            <div class="date">
-              <FormattedDate date={pubDate} />
-              {updatedDate && (
-                <div class="last-updated-on">
-                  Last updated on <FormattedDate date={updatedDate} />
+        <style>
+        main {
+            width: calc(100% - 2em);
+            max-width: 100%;
+            margin: 0;
+        }
+        .hero-image {
+            width: 100%;
+        }
+        .hero-image img {
+            display: block;
+            margin: 0 auto;
+            border-radius: 12px;
+            box-shadow: var(--box-shadow);
+        }
+        .prose {
+            width: 720px;
+            max-width: calc(100% - 2em);
+            margin: auto;
+            padding: 1em;
+            color: rgb(var(--gray-dark));
+        }
+        .title {
+            margin-bottom: 1em;
+            padding: 1em 0;
+            text-align: center;
+            line-height: 1;
+        }
+        .title h1 {
+            margin: 0 0 0.5em 0;
+        }
+        .date {
+            margin-bottom: 0.5em;
+            color: rgb(var(--gray));
+        }
+        .last-updated-on {
+            font-style: italic;
+        }
+        </style>
+    </head>
+    <body>
+        <Header />
+        <main>
+            <article>
+                <div class="hero-image">
+                    {heroImage && <Image width={1020} height={510} src={heroImage} alt={title} />}
                 </div>
-              )}
-            </div>
-            <h1>{title}</h1>
-            <hr />
-          </div>
-          <slot />
-        </div>
-      </article>
-    </main>
-    <Footer />
-  </body>
+                <div class="prose">
+                    <div class="title">
+                        <div class="date">
+                            <FormattedDate date={pubDate} />
+                            {updatedDate && (
+                            <div class="last-updated-on">
+                                Last updated on <FormattedDate date={updatedDate} />
+                            </div>
+                            )}
+                        </div>
+                        <h1>{title}</h1>
+                        <hr />
+                    </div>
+                    <slot />
+                </div>
+            </article>
+        </main>
+        <Footer />
+    </body>
 </html>
