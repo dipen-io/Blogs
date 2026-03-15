@@ -2,7 +2,10 @@
 import Layout from "../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 
-const allPosts = await getCollection("blog");
+// const allPosts = await getCollection("blog");
+const allPosts = (await getCollection('blog'))
+  .filter(post => !post.data.parent)   // ← hides sub-topics from main list
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <Layout>

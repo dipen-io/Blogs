@@ -3,18 +3,74 @@ import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: post,
-	}));
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: post,
+  }));
 }
-type Props = CollectionEntry<'blog'>;
 
+type Props = CollectionEntry<'blog'>;
 const post = Astro.props;
 const { Content } = await render(post);
+
+// Get sub-topics if this is a main index post
+const allPosts = await getCollection('blog');
+// const parentSlug = post.id.split('/')[0];
+// const allPosts = await getCollection('blog');
+
+const base = post.id.replace('/index', '');
+
+const subTopics = allPosts
+  .filter(p => p.id.startsWith(base + '/') && p.id !== post.id)
+  .sort((a, b) => (a.data.pubDate?.valueOf() ?? 0) - (b.data.pubDate?.valueOf() ?? 0));
 ---
 
+
+
 <BlogPost {...post.data}>
-	<Content />
+  <!-- Sub-topics list shown only on index pages -->
+  {subTopics.length > 0 && (
+    <ul class="subtopics">
+      {subTopics.map(topic => (
+        <li>
+          <a href={`/blog/${topic.id}/`}>{topic.data.title}</a>
+          {topic.data.description && <p>{topic.data.description}</p>}
+        </li>
+      ))}
+        <p style="color:red">post.id = {post.id}</p>
+        <p style="color:red">looking for parent = {post.id.replace('/index', '')}</p>
+        <p style="color:red">subtopics found = {subTopics.length}</p>
+    </ul>
+  )}
+
+  <Content />
 </BlogPost>
+
+<style>
+  .subtopics {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 1rem;
+  }
+  .subtopics li a {
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-decoration: none;
+    color: rgb(var(--accent));
+  }
+  .subtopics li a:hover {
+    text-decoration: underline;
+  }
+  .subtopics li p {
+    margin: 0.2rem 0 0;
+    font-size: 0.9rem;
+    color: rgb(var(--gray));
+  }
+</style>
