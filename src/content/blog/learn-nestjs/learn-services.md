@@ -1,7 +1,7 @@
 ---
 title: "Services & Dependency Injection"
 description: "Master the art of business logic separation and Dependency Injection in NestJS."
-pubDate: 2026-03-13
+pubDate: 2026-03-14
 parent: "learn-nestjs"
 ---
 
