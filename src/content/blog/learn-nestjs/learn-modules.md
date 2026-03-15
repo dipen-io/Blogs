@@ -14,6 +14,7 @@ Every application has at least one **Root Module** (usually `AppModule`), which 
 ---
 
 <br />
+
 ### 1. The `@Module()` Properties ⚙️
 
 The decorator takes an object with four essential properties:
@@ -28,6 +29,7 @@ The decorator takes an object with four essential properties:
 ---
 
 <br />
+
 ### 2. Feature Modules 📁
 
 As your app grows, you should group related code into **Feature Modules**. For example, everything related to "Cats" should live in a `CatsModule`.

@@ -1,7 +1,7 @@
 ---
 title: "Learn NestJS"
 description: "Complete NestJS guide"
-pubDate: 2024-01-01
+pubDate: 2026-02-10
 ---
 
 Welcome to the NestJS series!
