@@ -10,5 +10,5 @@ Welcome to the NestJS series!
 
 1. [Controllers](/blog/learn-nestjs/learn-controllers.md)
 2. [Services](/blog/learn-nestjs/learn-services.md)
-3. Modules
+3. [Modules](/blog/learn-nestjs/learn-modules.md)
 4. Dependency Injection
