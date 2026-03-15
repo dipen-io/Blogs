@@ -13,6 +13,8 @@ While a controller should only be responsible for handling the HTTP request and 
 
 ---
 
+<br />
+
 ### 1. The `@Injectable()` Decorator 💉
 
 The core of a NestJS service is the `@Injectable()` decorator. This metadata tells Nest that this class is a **Provider**—meaning it can be managed by the Nest IoC (Inversion of Control) container and injected into other classes (like Controllers).
@@ -33,3 +35,39 @@ export class CatsService {
     return this.cats;
   }
 }
+```
+
+<br />
+
+### 2 . Dependency Injection (DI) 🧩 
+
+Dependency Injection is a design pattern where a class requests dependencies from external sources rather than creating them itself. In NestJS, this is incredibly easy. You simply "ask" for the service in the constructor of your controller.
+
+```typescript
+
+@Controller('cats')
+export class CatsController {
+  // Nest will automatically find and inject the CatsService instance here
+  constructor(private catsService: CatsService) {}
+
+  @Get()
+  async findAll() {
+    return this.catsService.findAll();
+  }
+}
+```
+<br />
+
+### 4. Registering the Service 📝
+A service is just a class until you tell Nest it belongs to a Module. You must add it to the providers array in your module file so the Nest injector can instantiate it.
+```typescript
+import { Module } from '@nestjs/common';
+import { CatsController } from './cats.controller';
+import { CatsService } from './cats.service';
+
+@Module({
+  controllers: [CatsController],
+  providers: [CatsService], // <--- Don't forget this!
+})
+export class CatsModule {}
+```
