@@ -1,12 +1,12 @@
 ---
-title: "My Developer Productivity Setup"
+title: "My Developer Productivity "
 description: "How Void Linux, i3, tmux and Neovim make my development workflow fast and distraction-free."
 pubDate: 2026-03-10
 author: "Dinesh"
 tags: ["linux", "productivity", "neovim", "tmux", "i3"]
 ---
 
-# My Developer Productivity Setup
+##  My Developer Productivity Setup
 
 I have been using Linux for about three years now. My journey started with Arch Linux, which helped me understand how a Linux system works internally and gave me the freedom to customize everything.
 
