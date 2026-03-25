@@ -7,8 +7,11 @@ parent: "learn-filters"
 
 ## Introduction to Filtering
 
-Client hits:
+![Language](https://img.shields.io/badge/Language-JavaScript-yellow)
+![Runtime](https://img.shields.io/badge/Runtime-Node.js-green)
+![Database](https://img.shields.io/badge/Database-MongoDB-brightgreen)
 
+Client hits:
 ```
 GET /api/products
 ```
