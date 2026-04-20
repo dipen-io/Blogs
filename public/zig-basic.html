@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learn Zig</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e14;
+    --surface: #111720;
+    --border: #1e2d3d;
+    --zig: #f7a41d;
+    --zig-dim: #a06a0a;
+    --teal: #39d6c8;
+    --red: #ff4d6d;
+    --green: #4ecca3;
+    --purple: #b48ef7;
+    --text: #cdd9e5;
+    --muted: #5a7490;
+    --code-bg: #0d1620;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(247,164,29,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(247,164,29,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .layout {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-logo {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--zig);
+    letter-spacing: -1px;
+  }
+
+  .logo-text span { color: var(--teal); }
+  .logo-sub { font-size: 11px; color: var(--muted); margin-top: 3px; letter-spacing: 2px; text-transform: uppercase; }
+
+  .nav-section {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 0 24px 10px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 24px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--muted);
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+
+  .nav-item:hover { color: var(--text); background: rgba(247,164,29,0.05); }
+
+  .nav-item.active {
+    color: var(--zig);
+    border-left-color: var(--zig);
+    background: rgba(247,164,29,0.07);
+    font-weight: 700;
+  }
+
+  .nav-item .num {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: inherit;
+    opacity: 0.5;
+    min-width: 18px;
+  }
+
+  .progress-bar {
+    margin: 16px 24px;
+    background: var(--border);
+    border-radius: 2px;
+    height: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--zig), var(--teal));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+  .progress-label { font-size: 11px; color: var(--muted); margin: 8px 24px 0; }
+
+  /* MAIN */
+  .main {
+    flex: 1;
+    padding: 48px 56px;
+    max-width: 860px;
+  }
+
+  .lesson { display: none; animation: fadeIn 0.3s ease; }
+  .lesson.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .lesson-header {
+    margin-bottom: 32px;
+  }
+
+  .lesson-tag {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--zig);
+    background: rgba(247,164,29,0.1);
+    border: 1px solid rgba(247,164,29,0.2);
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-bottom: 12px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  h1 {
+    font-size: 38px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: #fff;
+    margin-bottom: 14px;
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--zig);
+  }
+
+  .lesson-desc {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 600px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--teal);
+    margin: 36px 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  h2::before {
+    content: '▸';
+    color: var(--zig);
+    font-size: 14px;
+  }
+
+  p { font-size: 15px; line-height: 1.75; color: var(--text); margin-bottom: 14px; }
+
+  /* CODE BLOCKS */
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin: 18px 0;
+    overflow: hidden;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+  }
+
+  .code-lang {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  .copy-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    background: none;
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .copy-btn:hover { color: var(--zig); border-color: var(--zig-dim); }
+
+  pre {
+    padding: 20px;
+    overflow-x: auto;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+  }
+
+  /* Syntax highlighting */
+  .kw { color: var(--purple); }
+  .fn-name { color: var(--zig); }
+  .str { color: var(--green); }
+  .num { color: #f97316; }
+  .cmt { color: var(--muted); font-style: italic; }
+  .type { color: var(--teal); }
+  .builtin { color: #e879f9; }
+
+  /* CALLOUTS */
+  .callout {
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 14px;
+    line-height: 1.7;
+    border-left: 3px solid;
+  }
+  .callout.info { background: rgba(57,214,200,0.07); border-color: var(--teal); }
+  .callout.warn { background: rgba(247,164,29,0.07); border-color: var(--zig); }
+  .callout.tip { background: rgba(78,204,163,0.07); border-color: var(--green); }
+  .callout.danger { background: rgba(255,77,109,0.07); border-color: var(--red); }
+  .callout strong { display: block; margin-bottom: 5px; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+  .callout.info strong { color: var(--teal); }
+  .callout.warn strong { color: var(--zig); }
+  .callout.tip strong { color: var(--green); }
+  .callout.danger strong { color: var(--red); }
+
+  /* QUIZ */
+  .quiz {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 24px;
+    margin: 28px 0;
+  }
+
+  .quiz-q {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 18px;
+  }
+
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .quiz-opt {
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'Space Mono', monospace;
+    color: var(--text);
+    background: var(--code-bg);
+    transition: all 0.15s;
+    text-align: left;
+  }
+
+  .quiz-opt:hover { border-color: var(--zig-dim); color: var(--zig); }
+  .quiz-opt.correct { border-color: var(--green); color: var(--green); background: rgba(78,204,163,0.08); }
+  .quiz-opt.wrong { border-color: var(--red); color: var(--red); background: rgba(255,77,109,0.08); }
+  .quiz-feedback { margin-top: 14px; font-size: 14px; display: none; }
+  .quiz-feedback.show { display: block; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 13px; }
+  th {
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--zig-dim);
+    color: var(--zig);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'Space Mono', monospace;
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+  }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* NAV BUTTONS */
+  .lesson-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 48px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 22px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.2s;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--muted);
+  }
+
+  .nav-btn:hover { color: var(--text); border-color: var(--text); }
+  .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .nav-btn.primary {
+    background: var(--zig);
+    color: #000;
+    border-color: var(--zig);
+  }
+  .nav-btn.primary:hover { background: #ffb92e; }
+
+  .lesson-count { font-size: 12px; color: var(--muted); font-family: 'Space Mono', monospace; }
+
+  /* inline code */
+  code { 
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    background: rgba(247,164,29,0.1);
+    color: var(--zig);
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+
+  ul, ol { padding-left: 20px; margin: 12px 0; }
+  li { margin: 6px 0; font-size: 15px; line-height: 1.65; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-family: 'Space Mono', monospace;
+  }
+  .badge.new { background: rgba(78,204,163,0.15); color: var(--green); }
+  .badge.hard { background: rgba(255,77,109,0.15); color: var(--red); }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-text">zig<span>lang</span></div>
+      <div class="logo-sub">Interactive Guide</div>
+    </div>
+
+    <div style="padding: 12px 24px;">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:10%"></div></div>
+      <div class="progress-label" id="progressLabel">1 / 10 lessons</div>
+    </div>
+
+    <nav id="navList">
+      <div class="nav-section">
+        <div class="nav-label">Fundamentals</div>
+        <div class="nav-item active" onclick="goTo(0)"><span class="num">01</span> Introduction</div>
+        <div class="nav-item" onclick="goTo(1)"><span class="num">02</span> Variables & Types</div>
+        <div class="nav-item" onclick="goTo(2)"><span class="num">03</span> Functions</div>
+        <div class="nav-item" onclick="goTo(3)"><span class="num">04</span> Control Flow</div>
+        <div class="nav-item" onclick="goTo(4)"><span class="num">05</span> Arrays & Slices</div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Intermediate</div>
+        <div class="nav-item" onclick="goTo(5)"><span class="num">06</span> Structs</div>
+        <div class="nav-item" onclick="goTo(6)"><span class="num">07</span> Error Handling</div>
+        <div class="nav-item" onclick="goTo(7)"><span class="num">08</span> Pointers</div>
+        <div class="nav-item" onclick="goTo(8)"><span class="num">09</span> Optionals</div>
+        <div class="nav-item" onclick="goTo(9)"><span class="num">10</span> Comptime</div>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- LESSON 0: Intro -->
+    <div class="lesson active" id="lesson-0">
+      <div class="lesson-header">
+        <div class="lesson-tag">Lesson 01 — Introduction</div>
+        <h1>What is <em>Zig</em>?</h1>
+        <p class="lesson-desc">A general-purpose, compiled systems language designed for robustness, optimality, and clarity — without hidden control flow or hidden memory allocations.</p>
+      </div>
+
+      <h2>Why Zig?</h2>
+      <p>Zig occupies a similar space to C — low-level, manual memory management, no garbage collector — but fixes many of C's pain points:</p>
+      <ul>
+        <li><strong>No undefined behavior</strong> — Zig makes UB explicit and detectable</li>
+        <li><strong>No hidden allocations</strong> — functions that allocate must accept an <code>Allocator</code></li>
+        <li><strong>No preprocessor</strong> — metaprogramming via <code>comptime</code> instead</li>
+        <li><strong>Excellent C interop</strong> — can import C headers directly</li>
+        <li><strong>Cross-compilation built-in</strong> — target any platform from any platform</li>
+      </ul>
+
+      <h2>Your First Program</h2>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">zig</span>
+          <button class="copy-btn" onclick="copyCode(this)">copy</button>
+        </div>
+        <pre><span class="kw">const</span> <span class="builtin">std</span> = <span class="kw">@import</span>(<span class="str">"std"</span>);
+
+<span class="kw">pub fn</span> <span class="fn-name">main</span>() <span class="type">void</span> {
+    <span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"Hello, Zig!\n"</span>, .{});
+}</pre>
+      </div>
+
+      <div class="callout info">
+        <strong>Note</strong>
+        <code>@import</code> is a built-in function (all builtins start with <code>@</code>). The standard library is imported as a value — no special syntax required.
+      </div>
+
+      <h2>Building & Running</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">shell</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="cmt"># Install Zig from ziglang.org, then:</span>
+zig init            <span class="cmt"># create a new project</span>
+zig build run       <span class="cmt"># build and run</span>
+zig run hello.zig   <span class="cmt"># run a single file</span></pre>
+      </div>
+
+      <div class="callout tip">
+        <strong>Try it</strong>
+        You can experiment with Zig in your browser at <strong>zig.godbolt.org</strong> or the official <strong>zig-play.dev</strong> playground — no install needed!
+      </div>
+
+      <div class="quiz">
+        <div class="quiz-q">Which symbol prefix identifies Zig built-in functions?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="quiz(this, false)">$ prefix</button>
+          <button class="quiz-opt" onclick="quiz(this, true)">@ prefix</button>
+          <button class="quiz-opt" onclick="quiz(this, false)">! prefix</button>
+          <button class="quiz-opt" onclick="quiz(this, false)"># prefix</button>
+        </div>
+        <div class="quiz-feedback" id="qfeedback-0"></div>
+      </div>
+    </div>
+
+    <!-- LESSON 1: Variables -->
+    <div class="lesson" id="lesson-1">
+      <div class="lesson-header">
+        <div class="lesson-tag">Lesson 02 — Variables & Types</div>
+        <h1><em>Variables</em> &amp; Types</h1>
+        <p class="lesson-desc">Zig is statically typed. Every variable has a type known at compile time. Immutability is the default.</p>
+      </div>
+
+      <h2>const vs var</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">const</span> x: <span class="type">i32</span> = <span class="num">42</span>;     <span class="cmt">// immutable — cannot be reassigned</span>
+<span class="kw">var</span>   y: <span class="type">i32</span> = <span class="num">10</span>;     <span class="cmt">// mutable</span>
+y = <span class="num">20</span>;                 <span class="cmt">// OK</span>
+<span class="cmt">// x = 99;             // ERROR: cannot assign to constant</span></pre>
+      </div>
+
+      <div class="callout warn">
+        <strong>Zig Philosophy</strong>
+        Prefer <code>const</code> whenever possible. Zig will warn you if you declare a <code>var</code> that's never mutated.
+      </div>
+
+      <h2>Primitive Types</h2>
+      <table>
+        <tr><th>Type</th><th>Description</th><th>Example</th></tr>
+        <tr><td>i8, i16, i32, i64, i128</td><td>Signed integers</td><td>-42</td></tr>
+        <tr><td>u8, u16, u32, u64, u128</td><td>Unsigned integers</td><td>255</td></tr>
+        <tr><td>f32, f64</td><td>Floating point</td><td>3.14</td></tr>
+        <tr><td>bool</td><td>Boolean</td><td>true / false</td></tr>
+        <tr><td>usize</td><td>Pointer-sized unsigned int</td><td>array indices</td></tr>
+        <tr><td>comptime_int</td><td>Compile-time integer</td><td>literals</td></tr>
+      </table>
+
+      <h2>Type Inference</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">const</span> a = <span class="num">100</span>;         <span class="cmt">// inferred as comptime_int</span>
+<span class="kw">const</span> b: <span class="type">u8</span> = <span class="num">100</span>;      <span class="cmt">// explicit u8</span>
+<span class="kw">const</span> pi = <span class="num">3.14159</span>;    <span class="cmt">// inferred as comptime_float</span>
+<span class="kw">const</span> name = <span class="str">"Alice"</span>;  <span class="cmt">// type: *const [5:0]u8 (string literal)</span></pre>
+      </div>
+
+      <h2>Integer Arithmetic</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">const</span> a: <span class="type">u8</span> = <span class="num">200</span>;
+<span class="kw">const</span> b: <span class="type">u8</span> = <span class="num">100</span>;
+
+<span class="cmt">// Normal addition — panics on overflow in debug mode</span>
+<span class="kw">const</span> sum = a + b;
+
+<span class="cmt">// Wrapping arithmetic — always wraps mod 256</span>
+<span class="kw">const</span> wrapped = a +% b;  <span class="cmt">// 44 (wraps around)</span>
+
+<span class="cmt">// Saturating arithmetic</span>
+<span class="kw">const</span> sat = a +| b;     <span class="cmt">// 255 (max u8)</span></pre>
+      </div>
+
+      <div class="callout tip">
+        <strong>Safety</strong>
+        In <strong>Debug</strong> and <strong>ReleaseSafe</strong> modes, integer overflow causes a panic. Use <code>+%</code> for explicit wrapping semantics.
+      </div>
+
+      <div class="quiz">
+        <div class="quiz-q">What keyword declares an immutable variable in Zig?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="quiz(this, false)">let</button>
+          <button class="quiz-opt" onclick="quiz(this, false)">val</button>
+          <button class="quiz-opt" onclick="quiz(this, true)">const</button>
+          <button class="quiz-opt" onclick="quiz(this, false)">final</button>
+        </div>
+        <div class="quiz-feedback" id="qfeedback-1"></div>
+      </div>
+    </div>
+
+    <!-- LESSON 2: Functions -->
+    <div class="lesson" id="lesson-2">
+      <div class="lesson-header">
+        <div class="lesson-tag">Lesson 03 — Functions</div>
+        <h1><em>Functions</em></h1>
+        <p class="lesson-desc">Functions in Zig are first-class. They must specify parameter types and return types explicitly. No overloading — use comptime generics instead.</p>
+      </div>
+
+      <h2>Basic Function</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">fn</span> <span class="fn-name">add</span>(a: <span class="type">i32</span>, b: <span class="type">i32</span>) <span class="type">i32</span> {
+    <span class="kw">return</span> a + b;
+}
+
+<span class="kw">pub fn</span> <span class="fn-name">main</span>() <span class="type">void</span> {
+    <span class="kw">const</span> result = <span class="fn-name">add</span>(<span class="num">3</span>, <span class="num">4</span>);
+    <span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"{d}\n"</span>, .{result}); <span class="cmt">// 7</span>
+}</pre>
+      </div>
+
+      <p><code>pub</code> makes a declaration visible outside its file. <code>fn</code> without <code>pub</code> is file-private.</p>
+
+      <h2>Multiple Return Values</h2>
+      <p>Zig doesn't have tuple returns, but you can return a struct:</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">const</span> <span class="type">DivResult</span> = <span class="kw">struct</span> {
+    quotient: <span class="type">i32</span>,
+    remainder: <span class="type">i32</span>,
+};
+
+<span class="kw">fn</span> <span class="fn-name">divmod</span>(a: <span class="type">i32</span>, b: <span class="type">i32</span>) <span class="type">DivResult</span> {
+    <span class="kw">return</span> .{ .quotient = a / b, .remainder = a % b };
+}
+
+<span class="kw">const</span> r = <span class="fn-name">divmod</span>(<span class="num">17</span>, <span class="num">5</span>);
+<span class="cmt">// r.quotient == 3, r.remainder == 2</span></pre>
+      </div>
+
+      <h2>Generic Functions (comptime)</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">fn</span> <span class="fn-name">max</span>(<span class="kw">comptime</span> T: <span class="type">type</span>, a: T, b: T) T {
+    <span class="kw">return if</span> (a > b) a <span class="kw">else</span> b;
+}
+
+<span class="kw">const</span> a = <span class="fn-name">max</span>(<span class="type">i32</span>, <span class="num">10</span>, <span class="num">20</span>);   <span class="cmt">// 20</span>
+<span class="kw">const</span> b = <span class="fn-name">max</span>(<span class="type">f64</span>, <span class="num">1.5</span>, <span class="num">0.9</span>); <span class="cmt">// 1.5</span></pre>
+      </div>
+
+      <div class="callout info">
+        <strong>No Overloading</strong>
+        Instead of function overloading, Zig uses <code>comptime T: type</code> to create type-generic functions resolved entirely at compile time. Zero runtime cost.
+      </div>
+
+      <div class="quiz">
+        <div class="quiz-q">What keyword makes a Zig declaration visible from other files?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="quiz(this, false)">export</button>
+          <button class="quiz-opt" onclick="quiz(this, false)">public</button>
+          <button class="quiz-opt" onclick="quiz(this, true)">pub</button>
+          <button class="quiz-opt" onclick="quiz(this, false)">extern</button>
+        </div>
+        <div class="quiz-feedback" id="qfeedback-2"></div>
+      </div>
+    </div>
+
+    <!-- LESSON 3: Control Flow -->
+    <div class="lesson" id="lesson-3">
+      <div class="lesson-header">
+        <div class="lesson-tag">Lesson 04 — Control Flow</div>
+        <h1>Control <em>Flow</em></h1>
+        <p class="lesson-desc">Zig's control flow is explicit and expression-oriented. <code>if</code>, <code>while</code>, and <code>for</code> can all produce values.</p>
+      </div>
+
+      <h2>if / else</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">const</span> x = <span class="num">42</span>;
+
+<span class="cmt">// Statement form</span>
+<span class="kw">if</span> (x > <span class="num">0</span>) {
+    <span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"positive\n"</span>, .{});
+} <span class="kw">else if</span> (x == <span class="num">0</span>) {
+    <span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"zero\n"</span>, .{});
+} <span class="kw">else</span> {
+    <span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"negative\n"</span>, .{});
+}
+
+<span class="cmt">// Expression form (ternary-like)</span>
+<span class="kw">const</span> label = <span class="kw">if</span> (x > <span class="num">0</span>) <span class="str">"pos"</span> <span class="kw">else</span> <span class="str">"non-pos"</span>;</pre>
+      </div>
+
+      <h2>while Loop</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">var</span> i: <span class="type">u32</span> = <span class="num">0</span>;
+<span class="kw">while</span> (i < <span class="num">5</span>) : (i += <span class="num">1</span>) {
+    <span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"{d} "</span>, .{i});
+}
+<span class="cmt">// prints: 0 1 2 3 4</span>
+
+<span class="cmt">// while with a continue expression is Zig's "for loop"</span></pre>
+      </div>
+
+      <h2>for Loop (over ranges & slices)</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">const</span> nums = [_]<span class="type">i32</span>{ <span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span> };
+
+<span class="cmt">// iterate values</span>
+<span class="kw">for</span> (nums) |n| {
+    <span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"{d}\n"</span>, .{n});
+}
+
+<span class="cmt">// iterate with index</span>
+<span class="kw">for</span> (nums, <span class="num">0</span>..) |n, i| {
+    <span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"[{d}] = {d}\n"</span>, .{ i, n });
+}
+
+<span class="cmt">// range (Zig 0.12+)</span>
+<span class="kw">for</span> (<span class="num">0</span>..<span class="num">5</span>) |i| {
+    <span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"{d} "</span>, .{i});
+}</pre>
+      </div>
+
+      <h2>switch</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">const</span> n: <span class="type">u8</span> = <span class="num">3</span>;
+<span class="kw">const</span> name = <span class="kw">switch</span> (n) {
+    <span class="num">1</span>       => <span class="str">"one"</span>,
+    <span class="num">2</span>, <span class="num">3</span>    => <span class="str">"two or three"</span>,   <span class="cmt">// multiple values</span>
+    <span class="num">4</span>..<span class="num">10</span>   => <span class="str">"four to ten"</span>,    <span class="cmt">// range</span>
+    <span class="kw">else</span>    => <span class="str">"other"</span>,
+};
+<span class="cmt">// name == "two or three"</span></pre>
+      </div>
+
+      <div class="callout info">
+        <strong>Exhaustive Switches</strong>
+        Zig's <code>switch</code> must cover all cases. If you miss a case, the compiler will error — no hidden fallthrough.
+      </div>
+
+      <div class="quiz">
+        <div class="quiz-q">In Zig, how do you write a <code>for</code> loop over a range 0 to 4 (inclusive)?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="quiz(this, false)">for i in 0..4</button>
+          <button class="quiz-opt" onclick="quiz(this, false)">for (0, 5) |i|</button>
+          <button class="quiz-opt" onclick="quiz(this, true)">for (0..5) |i|</button>
+          <button class="quiz-opt" onclick="quiz(this, false)">while (i &lt; 5)</button>
+        </div>
+        <div class="quiz-feedback" id="qfeedback-3"></div>
+      </div>
+    </div>
+
+    <!-- LESSON 4: Arrays & Slices -->
+    <div class="lesson" id="lesson-4">
+      <div class="lesson-header">
+        <div class="lesson-tag">Lesson 05 — Arrays & Slices</div>
+        <h1>Arrays &amp; <em>Slices</em></h1>
+        <p class="lesson-desc">Arrays have a fixed, compile-time length. Slices are a pointer + length pair — a view into any contiguous memory.</p>
+      </div>
+
+      <h2>Arrays</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="cmt">// [N]T — N is the length, T is the element type</span>
+<span class="kw">const</span> arr: [<span class="num">3</span>]<span class="type">i32</span> = [<span class="num">3</span>]<span class="type">i32</span>{ <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span> };
+
+<span class="cmt">// Shorthand — let compiler count</span>
+<span class="kw">const</span> arr2 = [_]<span class="type">i32</span>{ <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span> };
+
+<span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"{d}\n"</span>, .{arr2[<span class="num">1</span>]});  <span class="cmt">// 2</span>
+<span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"{d}\n"</span>, .{arr2.len}); <span class="cmt">// 3</span></pre>
+      </div>
+
+      <h2>Slices</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">const</span> arr = [_]<span class="type">u8</span>{ <span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>, <span class="num">50</span> };
+
+<span class="cmt">// Slice: arr[start..end]  (end is exclusive)</span>
+<span class="kw">const</span> s: []<span class="kw">const</span> <span class="type">u8</span> = arr[<span class="num">1</span>..<span class="num">4</span>];
+<span class="cmt">// s == { 20, 30, 40 },  s.len == 3</span>
+
+<span class="cmt">// Whole array as slice</span>
+<span class="kw">const</span> all = arr[<span class="num">0</span>..];
+<span class="cmt">// all.len == 5</span></pre>
+      </div>
+
+      <div class="callout info">
+        <strong>[]T vs [N]T</strong>
+        <code>[N]T</code> is an array of exactly N elements. <code>[]T</code> is a slice — a fat pointer (ptr + len) that can point to any array or subrange. Functions should usually accept slices, not arrays, for flexibility.
+      </div>
+
+      <h2>Strings</h2>
+      <p>Zig has no dedicated string type. Strings are <code>[]const u8</code> (a slice of bytes):</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">const</span> name: []<span class="kw">const</span> <span class="type">u8</span> = <span class="str">"Alice"</span>;
+<span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"Hello, {s}!\n"</span>, .{name});
+<span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"Length: {d}\n"</span>, .{name.len}); <span class="cmt">// 5</span>
+
+<span class="cmt">// String comparison</span>
+<span class="kw">const</span> eq = <span class="builtin">std</span>.mem.<span class="fn-name">eql</span>(<span class="type">u8</span>, name, <span class="str">"Alice"</span>); <span class="cmt">// true</span></pre>
+      </div>
+
+      <div class="quiz">
+        <div class="quiz-q">What is the Zig type for a string literal like <code>"hello"</code> when assigned to a variable?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="quiz(this, false)">String</button>
+          <button class="quiz-opt" onclick="quiz(this, true)">[]const u8</button>
+          <button class="quiz-opt" onclick="quiz(this, false)">[5]char</button>
+          <button class="quiz-opt" onclick="quiz(this, false)">str</button>
+        </div>
+        <div class="quiz-feedback" id="qfeedback-4"></div>
+      </div>
+    </div>
+
+    <!-- LESSON 5: Structs -->
+    <div class="lesson" id="lesson-5">
+      <div class="lesson-header">
+        <div class="lesson-tag">Lesson 06 — Structs</div>
+        <h1><em>Structs</em></h1>
+        <p class="lesson-desc">Structs group related data together. In Zig, structs can also have methods — functions that take the struct as their first parameter.</p>
+      </div>
+
+      <h2>Defining a Struct</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">const</span> <span class="type">Point</span> = <span class="kw">struct</span> {
+    x: <span class="type">f32</span>,
+    y: <span class="type">f32</span>,
+};
+
+<span class="kw">const</span> p = <span class="type">Point</span>{ .x = <span class="num">3.0</span>, .y = <span class="num">4.0</span> };
+<span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"({d}, {d})\n"</span>, .{ p.x, p.y });</pre>
+      </div>
+
+      <h2>Struct Methods</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">const</span> <span class="type">Vec2</span> = <span class="kw">struct</span> {
+    x: <span class="type">f32</span>,
+    y: <span class="type">f32</span>,
+
+    <span class="kw">pub fn</span> <span class="fn-name">length</span>(self: <span class="type">Vec2</span>) <span class="type">f32</span> {
+        <span class="kw">return</span> <span class="builtin">std</span>.math.<span class="fn-name">sqrt</span>(self.x * self.x + self.y * self.y);
+    }
+
+    <span class="kw">pub fn</span> <span class="fn-name">scale</span>(self: *<span class="type">Vec2</span>, factor: <span class="type">f32</span>) <span class="type">void</span> {
+        self.x *= factor;
+        self.y *= factor;
+    }
+};
+
+<span class="kw">var</span> v = <span class="type">Vec2</span>{ .x = <span class="num">3.0</span>, .y = <span class="num">4.0</span> };
+<span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">{d}\n"</span>, .{v.<span class="fn-name">length</span>()}); <span class="cmt">// 5.0</span>
+v.<span class="fn-name">scale</span>(<span class="num">2.0</span>);  <span class="cmt">// v.x=6, v.y=8</span></pre>
+      </div>
+
+      <div class="callout info">
+        <strong>self vs *self</strong>
+        <code>self: Vec2</code> — read-only, takes a copy.<br>
+        <code>self: *Vec2</code> — mutable reference, can modify the struct.
+      </div>
+
+      <h2>Default Values</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">const</span> <span class="type">Config</span> = <span class="kw">struct</span> {
+    width: <span class="type">u32</span> = <span class="num">800</span>,
+    height: <span class="type">u32</span> = <span class="num">600</span>,
+    fullscreen: <span class="type">bool</span> = <span class="kw">false</span>,
+};
+
+<span class="kw">const</span> cfg = <span class="type">Config</span>{ .width = <span class="num">1920</span> }; <span class="cmt">// height & fullscreen use defaults</span></pre>
+      </div>
+
+      <div class="quiz">
+        <div class="quiz-q">To write a mutating method on a struct, the receiver type should be:</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="quiz(this, false)">self: MyStruct</button>
+          <button class="quiz-opt" onclick="quiz(this, false)">mut self: MyStruct</button>
+          <button class="quiz-opt" onclick="quiz(this, true)">self: *MyStruct</button>
+          <button class="quiz-opt" onclick="quiz(this, false)">ref self: MyStruct</button>
+        </div>
+        <div class="quiz-feedback" id="qfeedback-5"></div>
+      </div>
+    </div>
+
+    <!-- LESSON 6: Error Handling -->
+    <div class="lesson" id="lesson-6">
+      <div class="lesson-header">
+        <div class="lesson-tag">Lesson 07 — Error Handling</div>
+        <h1>Error <em>Handling</em></h1>
+        <p class="lesson-desc">Zig has no exceptions. Errors are values — returned explicitly and handled explicitly. This makes error handling visible and impossible to accidentally ignore.</p>
+      </div>
+
+      <h2>Error Sets</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">const</span> <span class="type">ParseError</span> = <span class="kw">error</span>{
+    InvalidCharacter,
+    Overflow,
+    Empty,
+};
+
+<span class="kw">fn</span> <span class="fn-name">parseAge</span>(s: []<span class="kw">const</span> <span class="type">u8</span>) <span class="type">ParseError</span>!<span class="type">u8</span> {
+    <span class="kw">if</span> (s.len == <span class="num">0</span>) <span class="kw">return error</span>.Empty;
+    <span class="kw">return</span> <span class="builtin">std</span>.fmt.<span class="fn-name">parseInt</span>(<span class="type">u8</span>, s, <span class="num">10</span>) <span class="kw">catch</span> <span class="kw">error</span>.InvalidCharacter;
+}</pre>
+      </div>
+
+      <p>The <code>!</code> in <code>ParseError!u8</code> means "this function returns either a <code>ParseError</code> or a <code>u8</code>".</p>
+
+      <h2>Handling Errors</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre"><span class="cmt">// try — propagates errors up (like ? in Rust)</span>
+<span class="kw">fn</span> <span class="fn-name">run</span>() !<span class="type">void</span> {
+    <span class="kw">const</span> age = <span class="kw">try</span> <span class="fn-name">parseAge</span>(<span class="str">"25"</span>);
+    <span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"Age: {d}\n"</span>, .{age});
+}
+
+<span class="cmt">// catch — handle the error inline</span>
+<span class="kw">const</span> age = <span class="fn-name">parseAge</span>(<span class="str">"abc"</span>) <span class="kw">catch</span> |err| {
+    <span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"Error: {}\n"</span>, .{err});
+    <span class="kw">return</span>;
+};
+
+<span class="cmt">// catch with default value</span>
+<span class="kw">const</span> age2 = <span class="fn-name">parseAge</span>(<span class="str">"bad"</span>) <span class="kw">catch</span> <span class="num">0</span>;</pre>
+      </div>
+
+      <div class="callout warn">
+        <strong>try vs catch</strong>
+        <code>try expr</code> is shorthand for <code>expr catch |e| return e</code>. Use <code>try</code> to propagate, <code>catch</code> to handle locally.
+      </div>
+
+      <h2>Anyerror</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre"><span class="cmt">// !void means "anyerror!void" — can return any error</span>
+<span class="kw">pub fn</span> <span class="fn-name">main</span>() !<span class="type">void</span> {
+    <span class="kw">try</span> <span class="fn-name">someFunction</span>();
+}</pre>
+      </div>
+
+      <div class="quiz">
+        <div class="quiz-q">What does <code>try expr</code> do in Zig?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="quiz(this, false)">Panics if expr returns an error</button>
+          <button class="quiz-opt" onclick="quiz(this, true)">Returns the error from the current function if expr fails</button>
+          <button class="quiz-opt" onclick="quiz(this, false)">Catches and ignores the error</button>
+          <button class="quiz-opt" onclick="quiz(this, false)">Retries the expression</button>
+        </div>
+        <div class="quiz-feedback" id="qfeedback-6"></div>
+      </div>
+    </div>
+
+    <!-- LESSON 7: Pointers -->
+    <div class="lesson" id="lesson-7">
+      <div class="lesson-header">
+        <div class="lesson-tag">Lesson 08 — Pointers</div>
+        <h1><em>Pointers</em></h1>
+        <p class="lesson-desc">Zig gives you direct control over memory via pointers. Unlike C, Zig's type system distinguishes single-item pointers from many-item pointers and prevents common bugs.</p>
+      </div>
+
+      <h2>Single-Item Pointer</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">var</span> x: <span class="type">i32</span> = <span class="num">42</span>;
+<span class="kw">const</span> ptr: *<span class="type">i32</span> = &x;   <span class="cmt">// & takes the address</span>
+
+ptr.* = <span class="num">100</span>;            <span class="cmt">// .* dereferences</span>
+<span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"{d}\n"</span>, .{x}); <span class="cmt">// 100</span></pre>
+      </div>
+
+      <h2>Pointer Types</h2>
+      <table>
+        <tr><th>Type</th><th>Meaning</th></tr>
+        <tr><td>*T</td><td>Single non-null pointer to T</td></tr>
+        <tr><td>?*T</td><td>Optional (nullable) pointer to T</td></tr>
+        <tr><td>[*]T</td><td>Many-item pointer (unknown length)</td></tr>
+        <tr><td>[]T</td><td>Slice: pointer + length</td></tr>
+        <tr><td>*const T</td><td>Immutable pointer to T</td></tr>
+      </table>
+
+      <div class="callout danger">
+        <strong>No Null by Default</strong>
+        <code>*T</code> can NEVER be null. Use <code>?*T</code> to represent a nullable pointer. This eliminates a whole class of null-dereference bugs at compile time.
+      </div>
+
+      <h2>Heap Allocation</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">const</span> <span class="builtin">std</span> = <span class="kw">@import</span>(<span class="str">"std"</span>);
+
+<span class="kw">pub fn</span> <span class="fn-name">main</span>() !<span class="type">void</span> {
+    <span class="kw">var</span> gpa = <span class="builtin">std</span>.heap.GeneralPurposeAllocator(.{}){};
+    <span class="kw">defer</span> _ = gpa.<span class="fn-name">deinit</span>(); <span class="cmt">// check for leaks on exit</span>
+    <span class="kw">const</span> alloc = gpa.<span class="fn-name">allocator</span>();
+
+    <span class="kw">const</span> n = <span class="kw">try</span> alloc.<span class="fn-name">create</span>(<span class="type">i32</span>);
+    <span class="kw">defer</span> alloc.<span class="fn-name">destroy</span>(n);  <span class="cmt">// guaranteed cleanup</span>
+
+    n.* = <span class="num">99</span>;
+    <span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"{d}\n"</span>, .{n.*});
+}</pre>
+      </div>
+
+      <div class="callout tip">
+        <strong>defer</strong>
+        <code>defer</code> runs a statement when the current scope exits — like Go's defer or C++'s RAII. It's the idiomatic way to pair allocation with deallocation.
+      </div>
+
+      <div class="quiz">
+        <div class="quiz-q">How do you dereference a pointer <code>ptr</code> in Zig?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="quiz(this, false)">*ptr</button>
+          <button class="quiz-opt" onclick="quiz(this, true)">ptr.*</button>
+          <button class="quiz-opt" onclick="quiz(this, false)">deref(ptr)</button>
+          <button class="quiz-opt" onclick="quiz(this, false)">&ptr</button>
+        </div>
+        <div class="quiz-feedback" id="qfeedback-7"></div>
+      </div>
+    </div>
+
+    <!-- LESSON 8: Optionals -->
+    <div class="lesson" id="lesson-8">
+      <div class="lesson-header">
+        <div class="lesson-tag">Lesson 09 — Optionals</div>
+        <h1><em>Optionals</em></h1>
+        <p class="lesson-desc">Zig uses <code>?T</code> to represent a value that might be absent. This replaces null pointer hacks and makes "maybe nothing" explicit in the type system.</p>
+      </div>
+
+      <h2>Optional Basics</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">var</span> maybe: ?<span class="type">i32</span> = <span class="num">42</span>;
+maybe = <span class="kw">null</span>;           <span class="cmt">// now absent</span>
+
+<span class="cmt">// Unwrap with .? — panics if null</span>
+<span class="kw">const</span> val = maybe.?;
+
+<span class="cmt">// Safe unwrap with orelse</span>
+<span class="kw">const</span> safe = maybe <span class="kw">orelse</span> <span class="num">0</span>; <span class="cmt">// 0 if null</span>
+
+<span class="cmt">// orelse with return/break</span>
+<span class="kw">const</span> x = maybe <span class="kw">orelse return</span>;</pre>
+      </div>
+
+      <h2>if with optional capture</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">fn</span> <span class="fn-name">findUser</span>(id: <span class="type">u32</span>) ?[]<span class="kw">const</span> <span class="type">u8</span> {
+    <span class="kw">if</span> (id == <span class="num">1</span>) <span class="kw">return</span> <span class="str">"Alice"</span>;
+    <span class="kw">return null</span>;
+}
+
+<span class="kw">if</span> (<span class="fn-name">findUser</span>(<span class="num">1</span>)) |name| {
+    <span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"Found: {s}\n"</span>, .{name});
+} <span class="kw">else</span> {
+    <span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"Not found\n"</span>, .{});
+}</pre>
+      </div>
+
+      <div class="callout info">
+        <strong>Payload Capture</strong>
+        The <code>|name|</code> syntax captures the unwrapped value inside the <code>if</code> block. This pattern is also used in <code>while</code> loops for iterators that return optionals.
+      </div>
+
+      <h2>while with optional</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="cmt">// Loops until iterator returns null</span>
+<span class="kw">while</span> (<span class="fn-name">iterator</span>.<span class="fn-name">next</span>()) |item| {
+    <span class="fn-name">process</span>(item);
+}</pre>
+      </div>
+
+      <div class="quiz">
+        <div class="quiz-q">What operator provides a default value when an optional is null?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="quiz(this, false)">??</button>
+          <button class="quiz-opt" onclick="quiz(this, false)">unwrap_or</button>
+          <button class="quiz-opt" onclick="quiz(this, true)">orelse</button>
+          <button class="quiz-opt" onclick="quiz(this, false)">catch</button>
+        </div>
+        <div class="quiz-feedback" id="qfeedback-8"></div>
+      </div>
+    </div>
+
+    <!-- LESSON 9: Comptime -->
+    <div class="lesson" id="lesson-9">
+      <div class="lesson-header">
+        <div class="lesson-tag">Lesson 10 — Comptime</div>
+        <h1><em>Comptime</em></h1>
+        <p class="lesson-desc">Zig's most powerful feature: code that runs at compile time. It replaces C macros, C++ templates, and code generation tools — all with regular Zig syntax.</p>
+      </div>
+
+      <h2>comptime values</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="cmt">// Evaluated at compile time</span>
+<span class="kw">const</span> SIZE = <span class="num">1024</span>;
+<span class="kw">const</span> buf: [SIZE]<span class="type">u8</span> = <span class="builtin">undefined</span>;
+
+<span class="cmt">// Explicit comptime expression</span>
+<span class="kw">const</span> x = <span class="kw">comptime</span> (<span class="num">1</span> + <span class="num">2</span> + <span class="num">3</span>); <span class="cmt">// == 6, computed at compile</span></pre>
+      </div>
+
+      <h2>Generic Data Structures</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="cmt">// A function that RETURNS a type</span>
+<span class="kw">fn</span> <span class="fn-name">Stack</span>(<span class="kw">comptime</span> T: <span class="type">type</span>) <span class="type">type</span> {
+    <span class="kw">return struct</span> {
+        items: []T,
+        top: <span class="type">usize</span> = <span class="num">0</span>,
+
+        <span class="kw">pub fn</span> <span class="fn-name">push</span>(self: *@<span class="builtin">This</span>(), item: T) <span class="type">void</span> {
+            self.items[self.top] = item;
+            self.top += <span class="num">1</span>;
+        }
+    };
+}
+
+<span class="cmt">// Create a Stack of i32</span>
+<span class="kw">const</span> <span class="type">IntStack</span> = <span class="fn-name">Stack</span>(<span class="type">i32</span>);</pre>
+      </div>
+
+      <div class="callout tip">
+        <strong>Types are Values</strong>
+        In Zig, types are comptime values. A function can accept a <code>type</code> and return a <code>type</code>. This is how the standard library's <code>ArrayList(T)</code>, <code>HashMap(K, V)</code>, etc. work.
+      </div>
+
+      <h2>comptime if</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">zig</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+        <pre><span class="kw">fn</span> <span class="fn-name">doThing</span>(<span class="kw">comptime</span> debug: <span class="type">bool</span>) <span class="type">void</span> {
+    <span class="kw">if</span> (<span class="kw">comptime</span> debug) {
+        <span class="cmt">// This entire branch compiled out in release</span>
+        <span class="builtin">std</span>.debug.<span class="fn-name">print</span>(<span class="str">"debug mode\n"</span>, .{});
+    }
+}</pre>
+      </div>
+
+      <div class="callout info">
+        <strong>No Macro Language</strong>
+        Everything in comptime is regular Zig: loops, conditionals, function calls. There's no separate templating syntax to learn.
+      </div>
+
+      <div class="quiz">
+        <div class="quiz-q">In Zig, a function that accepts <code>comptime T: type</code> and returns <code>type</code> is used to create:</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="quiz(this, false)">Runtime polymorphism</button>
+          <button class="quiz-opt" onclick="quiz(this, false)">Dynamic dispatch</button>
+          <button class="quiz-opt" onclick="quiz(this, true)">Generic data structures</button>
+          <button class="quiz-opt" onclick="quiz(this, false)">Macros</button>
+        </div>
+        <div class="quiz-feedback" id="qfeedback-9"></div>
+      </div>
+
+      <div class="callout tip" style="margin-top:32px;">
+        <strong>What's Next?</strong>
+        You've covered the core of Zig! Explore further: <strong>tagged unions</strong>, <strong>async/await</strong> (experimental), <strong>build.zig</strong> build system, <strong>C interop</strong> with <code>@cImport</code>, and the standard library at <strong>ziglang.org/documentation</strong>.
+      </div>
+    </div>
+
+    <!-- NAV -->
+    <div class="lesson-nav">
+      <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Previous</button>
+      <span class="lesson-count" id="lessonCount">1 / 10</span>
+      <button class="nav-btn primary" id="nextBtn" onclick="navigate(1)">Next →</button>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  let current = 0;
+  const total = 10;
+
+  function goTo(n) {
+    document.getElementById('lesson-' + current).classList.remove('active');
+    document.querySelectorAll('.nav-item')[current].classList.remove('active');
+    current = n;
+    document.getElementById('lesson-' + current).classList.add('active');
+    document.querySelectorAll('.nav-item')[current].classList.add('active');
+    updateUI();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function navigate(dir) {
+    const next = current + dir;
+    if (next >= 0 && next < total) goTo(next);
+  }
+
+  function updateUI() {
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === total - 1;
+    document.getElementById('lessonCount').textContent = (current + 1) + ' / ' + total;
+    const pct = Math.round(((current + 1) / total) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = (current + 1) + ' / ' + total + ' lessons';
+  }
+
+  function quiz(btn, correct) {
+    const opts = btn.parentElement.querySelectorAll('.quiz-opt');
+    opts.forEach(o => o.disabled = true);
+    const feedbackId = 'qfeedback-' + current;
+    const fb = document.getElementById(feedbackId);
+    if (correct) {
+      btn.classList.add('correct');
+      fb.textContent = '✓ Correct!';
+      fb.style.color = 'var(--green)';
+    } else {
+      btn.classList.add('wrong');
+      fb.textContent = '✗ Not quite — try to review the section above.';
+      fb.style.color = 'var(--red)';
+      opts.forEach(o => { if (o.dataset.correct) o.classList.add('correct'); });
+    }
+    fb.classList.add('show');
+  }
+
+  function copyCode(btn) {
+    const code = btn.closest('.code-block').querySelector('pre').innerText;
+    navigator.clipboard.writeText(code).then(() => {
+      btn.textContent = 'copied!';
+      setTimeout(() => btn.textContent = 'copy', 1500);
+    });
+  }
+
+  updateUI();
+</script>
+</body>
+</html>
